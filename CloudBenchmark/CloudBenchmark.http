@@ -1,0 +1,6 @@
+@CloudBenchmark_HostAddress = http://localhost:5144
+
+GET {{CloudBenchmark_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
