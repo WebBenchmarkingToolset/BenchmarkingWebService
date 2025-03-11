@@ -10,10 +10,10 @@ namespace CloudBenchmark.Controllers
         [HttpGet]
         [Route("fileWrite")]
         //https://localhost:7167/api/Operations/fileWrite?fileSizeMB=100
-        public double fileWrite([FromQuery] int fileSizeMB)
+        public uint fileWrite([FromQuery] long fileSizeMB)
         {
             string filePath = $"fileWrite-{DateTime.UtcNow.Ticks}.bin";
-            int fileSize = fileSizeMB * 1024 * 1024; // to MB
+            long fileSize = fileSizeMB * 1024 * 1024; // to bytes
             byte[] data = new byte[fileSize];
             new Random().NextBytes(data);
 
@@ -23,16 +23,16 @@ namespace CloudBenchmark.Controllers
             sw.Stop();
 
             System.IO.File.Delete(filePath);
-            return Math.Round(sw.Elapsed.TotalMilliseconds);
+            return Convert.ToUInt32(sw.Elapsed.TotalMilliseconds); ;
         }
         
         [HttpGet]
         [Route("fileRead")]
         //https://localhost:7167/api/Operations/fileRead?fileSizeMB=100
-        public double fileRead([FromQuery] int fileSizeMB)
+        public uint fileRead([FromQuery] long fileSizeMB)
         {
             string filePath = $"fileRead-{DateTime.UtcNow.Ticks}.bin";
-            int fileSize = fileSizeMB * 1024 * 1024; // to MB
+            long fileSize = fileSizeMB * 1024 * 1024; // to bytes
             byte[] data = new byte[fileSize];
             new Random().NextBytes(data);
             System.IO.File.WriteAllBytes(filePath, data);
@@ -43,7 +43,51 @@ namespace CloudBenchmark.Controllers
             sw.Stop();
 
             System.IO.File.Delete(filePath);
-            return Math.Round(sw.Elapsed.TotalMilliseconds);
+            return Convert.ToUInt32(sw.Elapsed.TotalMilliseconds);
+        }
+
+
+
+
+
+        [HttpGet]
+        [Route("memoryWrite")]
+        //https://localhost:7167/api/Operations/memoryWrite?dataSizeMB=100
+        public uint memoryWrite([FromQuery] long dataSizeMB)
+        {
+            long dataSize = dataSizeMB * 1024 * 1024; // to bytes
+            byte[] memory = new byte[dataSize];
+
+            Stopwatch sw = Stopwatch.StartNew();
+
+            // Writing to memory
+            for (long i = 0; i < memory.Length; i++)
+                memory[i] = (byte)(i % 256);
+            sw.Stop();
+            return Convert.ToUInt32(sw.Elapsed.TotalMilliseconds);
+        }
+        
+        
+        [HttpGet]
+        [Route("memoryRead")]
+        //https://localhost:7167/api/Operations/memoryRead?dataSizeMB=100
+        public uint memoryRead([FromQuery] long dataSizeMB)
+        {
+            long dataSize = dataSizeMB * 1024 * 1024; // to bytes
+            byte[] memory = new byte[dataSize];
+
+
+            // Writing to memory
+            for (int i = 0; i < memory.Length; i++)
+                memory[i] = (byte)(i % 256);
+
+            Stopwatch sw = Stopwatch.StartNew();
+            // Reading from memory
+            long sum = 0;
+            for (int i = 0; i < memory.Length; i++)
+                sum += memory[i];
+            sw.Stop();
+            return Convert.ToUInt32(sw.Elapsed.TotalMilliseconds);
         }
     }
 }
