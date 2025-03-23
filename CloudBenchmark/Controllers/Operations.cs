@@ -111,5 +111,21 @@ namespace CloudBenchmark.Controllers
             sw.Stop();
             return Convert.ToUInt64(sw.Elapsed.TotalMilliseconds);
         }
+
+
+
+        [HttpPost]
+        [Route("dataFile")]
+        //post https://localhost:7167/api/Operations/dataFile
+        public DataFilePayload dataFile(DataFilePayload request)
+        {
+            return request;
+        }
+    }
+
+    public class DataFilePayload
+    {
+        public IFormFile DataFile { set; get; }
+
     }
 }
