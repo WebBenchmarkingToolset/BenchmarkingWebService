@@ -12,7 +12,7 @@ namespace CloudBenchmark.Controllers
         //https://localhost:7167/api/Operations/fileWrite?fileSizeMB=100
         public UInt64 fileWrite([FromQuery] long fileSizeMB)
         {
-            string filePath = $"fileWrite-{DateTime.UtcNow.Ticks}.bin";
+            string filePath = $"fileWrite-{Guid.NewGuid()}.bin";
             long fileSize = fileSizeMB * 1024 * 1024; // to bytes
             byte[] data = new byte[fileSize];
             new Random().NextBytes(data);
@@ -31,7 +31,7 @@ namespace CloudBenchmark.Controllers
         //https://localhost:7167/api/Operations/fileRead?fileSizeMB=100
         public UInt64 fileRead([FromQuery] long fileSizeMB)
         {
-            string filePath = $"fileRead-{DateTime.UtcNow.Ticks}.bin";
+            string filePath = $"fileRead-{Guid.NewGuid}.bin";
             long fileSize = fileSizeMB * 1024 * 1024; // to bytes
             byte[] data = new byte[fileSize];
             new Random().NextBytes(data);
