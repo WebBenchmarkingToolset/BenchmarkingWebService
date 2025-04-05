@@ -31,7 +31,7 @@ namespace CloudBenchmark.Controllers
         //https://localhost:7167/api/Operations/fileRead?fileSizeMB=100
         public UInt64 fileRead([FromQuery] long fileSizeMB)
         {
-            string filePath = $"fileRead-{Guid.NewGuid}.bin";
+            string filePath = $"fileRead-{Guid.NewGuid()}.bin";
             long fileSize = fileSizeMB * 1024 * 1024; // to bytes
             byte[] data = new byte[fileSize];
             new Random().NextBytes(data);
