@@ -121,11 +121,30 @@ namespace CloudBenchmark.Controllers
         {
             return request;
         }
+        
+        [HttpPost]
+        [Route("runLoad")]
+        //post https://localhost:7167/api/Operations/runLoad
+        public string runLoad(RunLoadRequest request)
+        {
+            var reader = new StreamReader(request.PythonFile.OpenReadStream());
+            string pythonCode =reader.ReadToEnd();
+
+            PythonRunner pythonRunner = new PythonRunner();
+            var result = pythonRunner.RunFromString<string>(pythonCode, request.ResultVariableName);
+            return result;
+        }
     }
 
     public class DataFilePayload
     {
         public IFormFile DataFile { set; get; }
-
     }
+    
+    public class RunLoadRequest
+    {
+        public IFormFile PythonFile { set; get; }
+        public string ResultVariableName { set; get; }
+    }
+
 }
